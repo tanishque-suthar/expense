@@ -1,9 +1,20 @@
+const loginSchema = require('../model/loginModel');
+const jwt = require('jsonwebtoken');
 const expenseSchema = require("../model/expenseModel")
+
 exports.addExpense = async(req,res)=>{
+    console.log("test");
     console.log(req.body);
     const {title,amount,date,category,paymentMethod} = req.body;
-
+    const user = req.data.id;
+    // const token = req.cookies.token;
+    // var user = "";
+    // jwt.verify(token, process.env.TOKEN_KEY, async (err, data) =>{
+    //     const usertemp = await loginSchema.findById(data.id);
+    //     user = usertemp._id;
+    // })
     const expense = expenseSchema({
+        user,
         title,
         amount,
         category,
@@ -28,7 +39,15 @@ exports.addExpense = async(req,res)=>{
 
 exports.getExpenses = async(req,res)=>{
     try {
-        const expenses = await expenseSchema.find().sort({createdAt: -1}); //by default last created item is at the bottom, therefore here i am sorting it in opposite order
+        // const token = req.cookies.token;
+        // var user = "";
+        // jwt.verify(token, process.env.TOKEN_KEY, async (err, data) =>{
+        //     const usertemp = await loginSchema.findById(data.id);
+        //     user = usertemp._id;
+        // })
+        // console.log(user);
+        // const expenses = await expenseSchema.find({ user: user });
+        const expenses = await expenseSchema.find({ user: req.data.id });
         res.status(200).json(expenses);
     } catch (error) {
         res.status(500).json({message:"Server error"});

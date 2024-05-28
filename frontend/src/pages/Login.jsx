@@ -29,7 +29,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/login",
+        "http://localhost:5000/login",
         {
           ...inputValue,
         },
@@ -40,7 +40,7 @@ const Login = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          navigate("/");
+          navigate("/dashboard");
         }, 1000);
       } else {
         handleError(message);

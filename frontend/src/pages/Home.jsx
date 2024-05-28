@@ -14,7 +14,7 @@ const Home = () => {
         navigate("/login");
       }
       const { data } = await axios.post(
-        "http://localhost:3000",
+        "http://localhost:5000/get-expenses",
         {},
         { withCredentials: true }
       );
@@ -39,6 +39,9 @@ const Home = () => {
           {" "}
           Welcome <span>{username}</span>
         </h4>
+        <p>
+
+        </p>
         <button onClick={Logout}>LOGOUT</button>
       </div>
       <ToastContainer />

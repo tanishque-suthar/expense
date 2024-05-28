@@ -54,17 +54,22 @@ createSecretToken = (id) => {
     return jwt.sign({ id }, process.env.TOKEN_KEY, {expiresIn: 3 * 24 * 60 * 60,});
 };
 
-module.exports.userVerification = (req, res) => {
+module.exports.userVerification = (req, res, next) => {
   const token = req.cookies.token
   if (!token) {
-    return res.json({ status: false })
+    return res.json({ status: false, message:"Access denied, token not entered" })
   }
   jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
     if (err) {
-     return res.json({ status: false })
-    } else {
+     return res.json({ status: false, message:"Access denied, token not valid" });
+    } 
+    else {
+      req.data = data;
       const user = await loginSchema.findById(data.id)
-      if (user) return res.json({ status: true, user: user.username })
+      if (user) {
+        console.log(data, user._id, user.username);
+        next();
+      }
       else return res.json({ status: false })
     }
   })
